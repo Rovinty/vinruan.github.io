@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="Rovinty 放牛场">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://lolee.cn">
+    <!--SEO-->
+
+    <meta name="keywords" content="RBAC">
+
+
+    <meta name="description" content="1 RBAC模型 访问控制是针对越权使用资源的防御措施。基本目标是为了限制访问主体（用户、进程、服务等）对访问客体（文件、系统等）的访问权限，从而使计算机系统在合法范围内使用；决定用户能做什么，...">
+
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+
+    <!--Title-->
+
+
+<title>基于RBAC权限管理 | Rovinty 放牛场</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="Rovinty 放牛场" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b25540d1b54244e343ba2f953850f37b";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header" style="background-image:url(/img/head_banner.jpg)">
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title="Devin">
+            <img src="/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">简单有趣,就在Rovinty</h2>-->
+            
+                <h2> 人生一世间，忽若暮春草. </h2>
+            
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://lolee.cn">Rovinty 放牛场</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa "></i>首页</a>
+								
+								<!-- Devin  -->
+								    
+								
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/前端/"><i class="fa "></i>前端</a>
+								
+								<!-- Devin  -->
+								    
+								
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/后端/"><i class="fa "></i>后端</a>
+								
+								<!-- Devin  -->
+								    
+								
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/工具/"><i class="fa "></i>工具</a>
+								
+								<!-- Devin  -->
+								    
+								
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/杂谈/"><i class="fa "></i>杂谈</a>
+								
+								<!-- Devin  -->
+								    
+								
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives/"><i class="fa "></i>时间轴</a>
+								
+								<!-- Devin  -->
+								    
+								
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/关于/"><i class="fa "></i>关于我</a>
+								
+								<!-- Devin  -->
+								   
+								        <ul>
+											
+												<li><a href="/about/图册/"><div>图册</div></a></li>
+											
+												<li><a href="/categories/随笔/"><div>随笔</div></a></li>
+											
+										</ul>
+									 
+								
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="基于RBAC权限管理">
+            
+	            基于RBAC权限管理
+            
+        </h1>
+        <div class="post-meta">
+    
+        <span class="categories-meta fa-wrap">
+            <i class="fa fa-folder-open-o"></i>
+            <a class="category-link" href="/categories/后端/">后端</a>
+        </span>
+    
+
+    
+        <span class="fa-wrap">
+            <i class="fa fa-tags"></i>
+            <span class="tags-meta">
+                
+                    <a class="tag-link" href="/tags/RBAC/">RBAC</a>
+                
+            </span>
+        </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2017/08/29</span>
+        </span>
+        
+    
+</div>
+            
+            
+            <p class="fa fa-exclamation-triangle warning">
+                本文于<strong>608</strong>天之前发表，文中内容可能已经过时。
+            </p>
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h3 id="1-RBAC模型"><a href="#1-RBAC模型" class="headerlink" title="1 RBAC模型"></a>1 RBAC模型</h3><p> 访问控制是针对越权使用资源的防御措施。基本目标是为了限制访问主体（用户、进程、服务等）对访问客体（文件、系统等）的访问权限，从而使计算机系统在合法范围内使用；决定用户能做什么，也决定代表一定用户利益的程序能做什么 。</p>
+<a id="more"></a>
+<p>  企业环境中的访问控制策略一般有三种：自主型访问控制方法、强制型访问控制方法和基于角色的访问控制方法（RBAC）。其中，自主式太弱，强制式太强，二者工作量大，不便于管理[1]。基于角色的访问控制方法是目前公认的解决大型企业的统一资源访问控制的有效方法。其显著的两大特征是：1.减小授权管理的复杂性，降低管理开销；2.灵活地支持企业的安全策略，并对企业的变化有很大的伸缩性。 </p>
+<p>  NIST（The National Institute of Standards and Technology，美国国家标准与技术研究院）标准RBAC模型由4个部件模型组成，这4个部件模型分别是基本模型RBAC0（Core RBAC）、角色分级模型RBAC1（Hierarchal RBAC）、角色限制模型RBAC2（Constraint RBAC）和统一模型RBAC3（Combines RBAC）[1]。RBAC0模型如图1所示。</p>
+<ul>
+<li>a. <strong>RBAC 0定义了能构成一个RBAC控制系统的最小的元素集合</strong>。<br>在RBAC之中,包含用户users(USERS)、角色roles(ROLES)、目标objects(OBS)、操作operations(OPS)、许可权permissions(PRMS)五个基本数据元素，权限被赋予角色,而不是用户，当一个角色被指定给一个用户时，此用户就拥有了该角色所包含的权限。会话sessions是用户与激活的角色集合之间的映射。RBAC0与传统访问控制的差别在于增加一层间接性带来了灵活性，RBAC1、RBAC2、RBAC3都是先后在RBAC0上的扩展。 </li>
+<li>b. <strong>RBAC 1引入角色间的继承关系，角色间的继承关系可分为一般继承关系和受限继承关系。</strong><br>一般继承关系仅要求角色继承关系是一个绝对偏序关系，允许角色间的多继承。而受限继承关系则进一步要求角色继承关系是一个树结构。 </li>
+<li>c. <strong>RBAC 2模型中添加了责任分离关系</strong>。RBAC2的约束规定了权限被赋予角色时,或角色被赋予用户时,以及当用户在某一时刻激活一个角色时所应遵循的强制性规则。责任分离包括静态责任分离和动态责任分离。约束与用户-角色-权限关系一起决定了RBAC2模型中用户的访问许可。 </li>
+<li>d. <strong>RBAC 3包含了RBAC1和RBAC2，既提供了角色间的继承关系，又提供了责任分离关系</strong>。</li>
+</ul>
+<h3 id="2-核心对象模型设计"><a href="#2-核心对象模型设计" class="headerlink" title="2 核心对象模型设计"></a>2 核心对象模型设计</h3><p>根据RBAC模型的权限设计思想，建立权限管理系统的核心对象模型.对象模型中包含的基本元素主要有：用户（Users）、用户组（Group）、角色（Role）、目标（Objects）、访问模式（Access Mode）、操作（Operator）。主要的关系有：分配角色权限PA（Permission Assignment）、分配用户角色UA（Users Assignmen描述如下： </p>
+<ul>
+<li>a .<strong>控制对象</strong>：是系统所要保护的资源（Resource），可以被访问的对象。资源的定义需要注意以下两个问题： <ul>
+<li>1.资源具有层次关系和包含关系。例如，网页是资源，网页上的按钮、文本框等对象也是资源，是网页节点的子节点，如可以访问按钮，则必须能够访问页面。 </li>
+<li>2.这里提及的资源概念是指资源的类别（Resource Class），不是某个特定资源的实例（Resource Instance）。资源的类别和资源的实例的区分，以及资源的粒度的细分，有利于确定权限管理系统和应用系统之间的管理边界，权限管理系统需要对于资源的类别进行权限管理，而应用系统需要对特定资源的实例进行权限管理。两者的区分主要是基于以下两点考虑：<br>一方面，资源实例的权限常具有资源的相关性。即根据资源实例和访问资源的主体之间的关联关系，才可能进行资源的实例权限判断。 例如，在管理信息系统中，需要按照营业区域划分不同部门的客户，A区和B区都具有修改客户资料这一受控的资源，这里“客户档案资料”是属于资源的类别的范畴。如果规定A区只能修改A区管理的客户资料，就必须要区分出资料的归属，这里的资源是属于资源实例的范畴。客户档案（资源）本身应该有其使用者的信息（客户资料可能就含有营业区域这一属性），才能区分特定资源的实例操作，可以修改属于自己管辖的信息内容。<br>另一方面，资源的实例权限常具有相当大的业务逻辑相关性。对不同的业务逻辑，常常意味着完全不同的权限判定原则和策略。</li>
+</ul>
+</li>
+<li>b.<strong>权限</strong>：对受保护的资源操作的访问许可(Access Permission)，是绑定在特定的资源实例上的。对应地，访问策略（Access Strategy）和资源类别相关，不同的资源类别可能采用不同的访问模式（Access Mode）。例如，页面具有能打开、不能打开的访问模式，按钮具有可用、不可用的访问模式，文本编辑框具有可编辑、不可编辑的访问模式。同一资源的访问策略可能存在排斥和包含关系。例如，某个数据集的可修改访问模式就包含了可查询访问模式。 </li>
+<li>c.<strong>用户</strong>：是权限的拥有者或主体。用户和权限实现分离，通过授权管理进行绑定。 </li>
+<li>d.<strong>用户组</strong>：一组用户的集合。在业务逻辑的判断中，可以实现基于个人身份或组的身份进行判断。系统弱化了用户组的概念，主要实现用户（个人的身份）的方式。 </li>
+<li>e.<strong>角色</strong>：权限分配的单位与载体。角色通过继承关系支持分级的权限实现。例如，科长角色同时具有科长角色、科内不同业务人员角色。 </li>
+<li>f.<strong>操作</strong>：完成资源的类别和访问策略之间的绑定。 </li>
+<li>g.<strong>分配角色权限PA</strong>：实现操作和角色之间的关联关系映射。 </li>
+<li><p>h.<strong>分配用户角色UA</strong>：实现用户和角色之间的关联关系映射。 </p>
+<p>该对象模型最终将访问控制模型转化为访问矩阵形式。访问矩阵中的行对应于用户，列对应于操作，每个矩阵元素规定了相应的角色，对应于相应的目标被准予的访问许可、实施行为。按访问矩阵中的行看，是访问能力表CL(Access Capabilities)的内容；按访问矩阵中的列看，是访问控制表ACL（Access Control Lists）的内容。</p>
+</li>
+</ul>
+<p><strong>一切只有此图可说明：</strong><br>（整理自己电脑资料,也不知哪位博友原创了，在此感谢！）<br>  <div align="center"><br> <img src="/img/content/180839156767770.png"><br></div></p>
+
+    </div>
+    
+        <div class="reward" ontouchstart>
+    <div class="reward-wrap">赏
+        <div class="reward-box">
+            
+            
+                <span class="reward-type">
+                    <img class="wechat" src="/img/reward-wepay.jpg"><b>微信打赏</b>
+                </span>
+            
+        </div>
+    </div>
+    <p class="reward-tip">赞赏是不耍流氓的鼓励</p>
+</div>
+
+
+    
+    <div class="post-footer">
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href target="_blank">Rovinty</a>
+            
+        </div>
+        <div>
+            
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2017/08/23/生活点滴记录于此/" class="next-post btn btn-default" title="共勉之">
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">共勉之</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+    <div id="comments">
+        
+	
+    <div id="vcomments" class="valine"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="/assets/valine.min.js"></script>
+
+    <script>
+        new Valine({
+            av: AV,
+            el: '#vcomments',
+            appId: 'iqmteeMbB5TOAVCizHiwn9Vm-gzGzoHsz',
+            appKey: 'Ci40kaMeUbviUu6UTU01QwLe',
+            placeholder: '说点什么，鼓励下吧',
+            notify: false,
+            verify: true,
+            avatar: 'mm',
+            meta: 'nick,mail'.split(','),
+            pageSize: '10',
+            path: window.location.pathname,
+            lang: 'zh-CN'.toLowerCase()
+        })
+    </script>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-RBAC模型"><span class="toc-text">1 RBAC模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-核心对象模型设计"><span class="toc-text">2 核心对象模型设计</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+              <!--  <span>Copyright &copy; 2017 -->
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//lolee.cn" class="copyright-links" target="_blank" rel="nofollow">Lolee</a>
+			<!--		
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a> 
+                </span>
+				-->
+            </span></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
